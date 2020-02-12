@@ -2,15 +2,14 @@ import React, { Component } from 'react';
 import SwapiService from '../../services/SwapiService';
 import Loading from '../Loading';
 import PlanetView from './View/PlanetView';
-import ErrorIndicator from '../Alerts/ErrorIndicator';
+import ErrorBoundery from '../Alerts/ErrorBoundery';
 import './RandomPlanet.css';
 
 export default class RandomPlanet extends Component {
     swapiService = new SwapiService();
     state = {
         planet: {},
-        loading: true,
-        error: false
+        loading: true
     }
     componentDidMount() {
         this.updatePlanet();
@@ -18,12 +17,6 @@ export default class RandomPlanet extends Component {
     }
     componentWillUnmount() {
         clearInterval(this.interval)
-    }
-    onError = (err) => {
-        this.setState({
-            error: true,
-            loading: false
-        })
     }
     onPlanetLoaded = (planet) => {
         this.setState({
@@ -39,19 +32,18 @@ export default class RandomPlanet extends Component {
             .catch(this.onError)
     }
     render() {
-        const { planet, loading, error } = this.state;
+        const { planet, loading } = this.state;
 
-        const hasData = !(loading || error)
-        const errorIndicator = error ? <ErrorIndicator /> : null
+        const hasData = !(loading)
         const spinner = loading ? <Loading /> : null
         const content = hasData ? <PlanetView planet={planet} /> : null
         return (
-            <div className="random-planet jumbotron rounded" >
-                {errorIndicator}
-                {spinner}
-                {content}
-            </div>
-
+            <ErrorBoundery>
+                <div className="random-planet jumbotron rounded" >
+                    {spinner}
+                    {content}
+                </div>
+            </ErrorBoundery>
         );
     }
 }

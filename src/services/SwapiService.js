@@ -2,7 +2,7 @@ import { Component } from 'react'
 
 export default class SwapiService extends Component {
     _apiBase = 'https://swapi.co/api';
-
+    _imgBase = `https://starwars-visualguide.com/assets/img`
     getResourse = async (url) => {
         let res = await fetch(`${this._apiBase}${url}`);
         if (!res.ok) {
@@ -34,10 +34,12 @@ export default class SwapiService extends Component {
         return res.results.map(this._transformStarship);
     }
     getStarship = async (id) => {
-        return this.getResourse(`/starships/${id}/`);
+        const starship = await this.getResourse(`/starships/${id}/`);
+        return this._transformStarship(starship)
     }
     _extractId(item) {
-        const idRegExp = /\/([0-9]*)\/$/
+        const idRegExp = /\/([0-9]*)\/$/;
+        console.log(item)
         return item.match(idRegExp)[1]
     }
     _transformPlanet = (planet) => {
@@ -54,7 +56,7 @@ export default class SwapiService extends Component {
             id: this._extractId(person.url),
             name: person.name,
             gender: person.gender,
-            birthYear: person.birthYear,
+            birthYear: person.birth_year,
             eyeColor: person.eyeColor
         }
     }
@@ -70,5 +72,14 @@ export default class SwapiService extends Component {
             passengers: starship.passengers,
             cargoCapasity: starship.cargoCapasity
         }
+    }
+    getPersonImage = ({ id }) => {
+        return `${this._imgBase}/characters/${id}.jpg`
+    }
+    getStarshipImage = ({ id }) => {
+        return `${this._imgBase}/starships/${id}.jpg`
+    }
+    getPlanetImage = ({ id }) => {
+        return `${this._imgBase}/planets/${id}.jpg`
     }
 }
