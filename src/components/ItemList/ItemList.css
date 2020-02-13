@@ -1,5 +1,9 @@
 .item-list .list-group-item {
     cursor: pointer;
+    padding: 1rem;
+  }
+  .item-list{
+    padding-bottom: 1rem;
   }
   
   .item-list .list-group-item:hover {
