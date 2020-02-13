@@ -16,19 +16,21 @@ export default class PeoplePage extends Component {
     }
     render() {
         const itemList = (
-            <ItemList
-                onItemSelected={this.onItemSelected}
-                getData={this.props.getData}
-            >
-                {
-                    (item) =>
-                        (`${item.name} (${item.birthYear}) `)
-                }
-            </ItemList>
+            <ErrorBoundery>
+                <ItemList
+                    onItemSelected={this.onItemSelected}
+                    getData={this.props.getData}
+                >
+                    {
+                        (item) =>
+                            (`${item.name} (${item.birthYear}) `)
+                    }
+                </ItemList>
+            </ErrorBoundery>
         );
         const itemDetails = (
             <ErrorBoundery>
-                <ItemDetails itemId={this.state.selectedItem} getData={this.props.getData} />
+                <ItemDetails itemId={this.state.selectedItem} getData={this.props.getData} getImageUrl={this.props.getImageUrl} />
             </ErrorBoundery>
         );
         return (

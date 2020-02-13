@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import SwapiService from '../../services/SwapiService';
-import ItemDetailsView from './View/ItemDetailsView';
 import Loading from '../Loading';
 import ErrorBoundery from '../Alerts/ErrorBoundery';
 import './ItemDetails.css';
@@ -18,14 +17,14 @@ export default class ItemDetails extends Component {
 
     updateItem() {
         const { itemId, getData, getImageUrl } = this.props
-        if (!itemId || !getData) {
+        if (!itemId || !getData || !getImageUrl) {
             return
         }
         getData(itemId)
             .then((item) => {
                 this.setState({
                     item,
-                    image: getImageUrl(item),
+                    image: getImageUrl(itemId),
                     loading: false
                 })
             })
@@ -41,20 +40,30 @@ export default class ItemDetails extends Component {
         }
     }
     render() {
-        const { loading, error, image } = this.state
-        const hasData = !(loading || error)
+        const { loading, item, image } = this.state
         const spinner = loading ? <Loading /> : null
-        if (!this.props.itemId) {
-            return <ErrorBoundery />
+        if (!item) {
+            return spinner
         }
-        const content = hasData ? <ItemDetailsView item={this.state.item} image={image} /> : null
         return (
             <ErrorBoundery>
                 <div className="item-details card">
-                    {spinner}
-                    {content}
+                    <img className="item-image"
+                        src={image}
+                        alt="item" />
+
+                    <div className="card-body">
+                        <h4>{item.name}</h4>
+                        <ul className="list-group list-group-flush">
+                            {
+                                React.Children.map(this.props.children, (child) => {
+                                    return React.cloneElement(child, { item });
+                                })
+                            }
+                        </ul>
+                    </div>
                 </div>
             </ErrorBoundery>
         )
     }
-}
+};

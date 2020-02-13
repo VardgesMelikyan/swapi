@@ -39,7 +39,6 @@ export default class SwapiService extends Component {
     }
     _extractId(item) {
         const idRegExp = /\/([0-9]*)\/$/;
-        console.log(item)
         return item.match(idRegExp)[1]
     }
     _transformPlanet = (planet) => {
@@ -57,7 +56,7 @@ export default class SwapiService extends Component {
             name: person.name,
             gender: person.gender,
             birthYear: person.birth_year,
-            eyeColor: person.eyeColor
+            eyeColor: person.eye_color
         }
     }
     _transformStarship = (starship) => {
@@ -66,20 +65,21 @@ export default class SwapiService extends Component {
             name: starship.name,
             model: starship.model,
             manufacruter: starship.manufacturer,
-            costInCreadits: starship.costInCreadits,
+            costInCreadits: starship.cost_in_credits,
             length: starship.length,
             crew: starship.crew,
             passengers: starship.passengers,
-            cargoCapasity: starship.cargoCapasity
+            hyperdriveRating: starship.hyperdrive_rating,
+            starshipClass: starship.starship_class
         }
     }
-    getPersonImage = ({ id }) => {
+    getPersonImage = (id) => {
         return `${this._imgBase}/characters/${id}.jpg`
     }
-    getStarshipImage = ({ id }) => {
+    getStarshipImage = (id) => {
         return `${this._imgBase}/starships/${id}.jpg`
     }
-    getPlanetImage = ({ id }) => {
+    getPlanetImage = (id) => {
         return `${this._imgBase}/planets/${id}.jpg`
     }
 }
