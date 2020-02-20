@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-import SwapiService from '../../services/SwapiService';
 import Loading from '../Loading';
 import ErrorBoundery from '../Alerts/ErrorBoundery';
 import './ItemDetails.css';
 
 export default class ItemDetails extends Component {
-    swapiService = new SwapiService();
     state = {
         item: null,
         loading: true,

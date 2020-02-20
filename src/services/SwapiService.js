@@ -47,7 +47,8 @@ export default class SwapiService extends Component {
             name: planet.name,
             population: planet.population,
             rotationPeriod: planet.rotation_period,
-            diameter: planet.diameter
+            diameter: planet.diameter,
+            climate: planet.climate
         }
     }
     _transformPerson = (person) => {

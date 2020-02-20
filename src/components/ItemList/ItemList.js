@@ -1,7 +1,5 @@
-import React, { Component } from 'react';
-import { withData } from '../hoc-helper/withData'
+import React from 'react';
 import ErrorBoundery from '../Alerts/ErrorBoundery';
-import SwapiService from '../../services/SwapiService';
 import './ItemList.css';
 
 const ItemList = (props) => {
@@ -13,7 +11,7 @@ const ItemList = (props) => {
         return (
             <li className="list-group-item"
                 key={id}
-                onClick={() => props.onItemSelected(id)}>
+                onClick={() => onItemSelected(id)}>
                 {label}
             </li>
         );
@@ -26,5 +24,4 @@ const ItemList = (props) => {
         </ErrorBoundery>
     );
 }
-const { getAllpeaple } = new SwapiService();
-export default withData(ItemList, getAllpeaple);
+export default ItemList

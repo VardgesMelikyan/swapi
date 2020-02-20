@@ -1,102 +1,57 @@
 import React, { Component } from 'react';
 import Header from './components/Header';
 import RandomPlanet from './components/RandomPlanet';
-import PeoplePage from './components/PeoplePage';
-import ItemDetails from './components/ItemDetails';
-import Record from './components/Record';
-import ItemList from './components/ItemList';
-// import PlanetPage from './components/PlanetPage';
+import { SwapiServiceProvider } from './components/SwapiServiceContest'
 import ErrorBoundery from './components/Alerts/ErrorBoundery';
 import SwapiService from './services/SwapiService'
-import Row from './components/Row'
+import { PeaplePage, PlanetsPage, StarshipsPage, LoginPage, SecretPage } from './components/Pages'
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
 import './App.css';
 import './customBootstrap/bootstrap.min.css'
+import { StarshipDetails } from './components/sw-component';
 export default class App extends Component {
   swapiService = new SwapiService();
   state = {
-    showRandomPlanet: true,
-    // selectedPerson: 2
+    isLoggedIn: false
   }
-
-  toggleRandomPlanet = () => {
-    this.setState((state) => {
-      return {
-        showRandomPlanet: !state.showRandomPlanet
-      }
-    });
-  };
-
+  onLogin = () => {
+    return this.setState({ isLoggedIn: true })
+  }
   render() {
-    const planet = this.state.showRandomPlanet ?
-      <RandomPlanet /> :
-      null;
-    const { getPerson,
-      getStarship,
-      getPersonImage,
-      getStarshipImage,
-      getAllPeaple,
-      getAllPlanets,
-      getAllStarships
-    } = this.swapiService
-    const personDetails = {
-      right: (
-        <ItemDetails
-          itemId={1}
-          getData={getPerson}
-          getImageUrl={getPersonImage} >
-
-          <Record field="gender" label="Gender" />
-          <Record field="eyeColor" label="Eye Color" />
-
-        </ItemDetails>),
-      left: (<ItemList
-        onItemSelected={this.onItemSelected}
-        getData={getAllPeaple}
-      >
-        {
-          (item) =>
-            (`${item.name} (${item.birthYear}) `)
-        }
-      </ItemList>)
-    };
-    const starshipDetails = {
-      right: (
-        <ItemDetails
-          itemId={11}
-          getData={getStarship}
-          getImageUrl={getStarshipImage} >
-
-          <Record field="model" label="Model" />
-          <Record field="length" label="Length" />
-          <Record field="passengers" label="Passengers" />
-          <Record field="hyperdriveRating" label="Hyperdrive Rating" />
-
-        </ItemDetails>),
-      left: (<ItemList
-        onItemSelected={this.onItemSelected}
-        getData={getAllStarships}
-      >
-        {
-          (item) =>
-            (`${item.name} `)
-        }
-      </ItemList>)
-    };
     return (
       <ErrorBoundery>
-        <div>
-          <Header />
-          {planet}
-          <div className="row mb2 button-row">
-            <button
-              className="toggle-planet btn btn-warning btn-lg"
-              onClick={this.toggleRandomPlanet}>
-              Toggle Random Planet
-          </button>
-          </div>
-          <Row left={personDetails.left} right={personDetails.right} />
-          <Row left={starshipDetails.left} right={starshipDetails.right} />
-        </div>
+        <SwapiServiceProvider value={this.swapiService}>
+          <Router>
+            <div>
+              <Header />
+              <RandomPlanet />
+              <Switch>
+                <Route path='/' render={() => <h2>Hello</h2>} exact={true} />
+                <Route path='/peaple/:id?' component={PeaplePage} />
+                <Route path='/planets' component={PlanetsPage} />
+                <Route path='/starships' exact component={StarshipsPage} />
+                <Route path='/starships/:id' render={
+                  ({ match, location, history }) => {
+                    return <StarshipDetails itemId={match.params.id} />
+                  }
+                }
+
+                />
+                <Route path='/login' exact render={() => (
+                  <LoginPage
+                    isLoggedIn={this.state.isLoggedIn}
+                    onLogin={this.onLogin}
+
+                  />
+                )} />
+                <Route path='/secret' exact render={() => (
+                  <SecretPage isLoggedIn={this.state.isLoggedIn} />
+                )} />
+                <Redirect to={'/404'} />
+              </Switch>
+            </div>
+          </Router>
+        </SwapiServiceProvider>
       </ErrorBoundery>
     );
   }

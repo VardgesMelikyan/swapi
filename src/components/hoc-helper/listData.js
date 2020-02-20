@@ -1,14 +1,14 @@
-import React from 'react'
+import React, { Component } from 'react'
 import ErrorBoundery from '../Alerts/ErrorBoundery';
 import Loading from '../Loading';
-const withData = (View, getData) => {
+const listData = (View) => {
     return class extends Component {
         state = {
             data: null,
         }
         componentDidMount() {
-            if (getData)
-                getData()
+            if (this.props.getData)
+                this.props.getData()
                     .then((data) => {
                         this.setState({
                             data
@@ -16,6 +16,7 @@ const withData = (View, getData) => {
                     })
         }
         render() {
+
             const { data } = this.state
             if (!data) {
                 return <Loading />
@@ -28,4 +29,4 @@ const withData = (View, getData) => {
         }
     }
 }
-export default withData;
+export { listData };
